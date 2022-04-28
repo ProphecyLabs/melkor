@@ -8,10 +8,10 @@ from pandas_profiling import ProfileReport
 if __name__ == "__main__":
 
     # import dataset after cleaning step
-    df_clean = pd.read_csv("resources/mdf_clean.csv")
+    df_clean = pd.read_csv("resources/data/df_clean.csv")
 
     # import master dataset
-    master = pd.read_csv("resources/master.csv")
+    master = pd.read_csv("resources/data/master.csv")
 
     # generate report for dataset after cleaning step
     ProfileReport(df_clean).to_file("log/report_clean.html")

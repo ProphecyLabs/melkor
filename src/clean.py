@@ -17,7 +17,7 @@ def to_snake(str_in, scream=False):
 if __name__ == "__main__":
 
     # read in data
-    df = pd.read_csv("resources/ames_housing.csv")
+    df = pd.read_csv("resources/data/ames_housing.csv")
 
     # convert column names to snake_case
     df.columns = [to_snake(col) for col in df.columns]
@@ -56,4 +56,4 @@ if __name__ == "__main__":
     df = df.astype(dct_dtypes)
 
     # save output DataFrame as pickled object
-    df.to_csv("resources/df_clean.csv", index=False)
+    df.to_csv("resources/data/df_clean.csv", index=False)

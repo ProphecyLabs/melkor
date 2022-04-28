@@ -4,7 +4,7 @@ import datetime
 
 if __name__ == "__main__":
 
-    df = pd.read_csv("resources/df_clean.csv")
+    df = pd.read_csv("resources/data/df_clean.csv")
 
     # transform misc_feature values into dummies
     df_tmp = pd.get_dummies(df["misc_feature"])
@@ -36,7 +36,7 @@ if __name__ == "__main__":
             df = pd.concat([df, df_tmp], axis=1).drop(col, axis=1)
 
     # save master dataset to csv
-    df.to_csv("resources/master.csv", index=False)
+    df.to_csv("resources/data/master.csv", index=False)
 
     # generate dictionary of dtypes
     dct_dtypes = {key: str(value) for key, value in df.dtypes.to_dict().items()}
