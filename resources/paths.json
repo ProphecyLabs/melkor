@@ -1,0 +1,13 @@
+{
+    "data": {
+        "raw": "resources/data/ames_housing.csv",
+        "clean": "resources/data/df_clean.csv",
+        "master": "resources/data/master.csv"
+    },
+    "log": {
+        "dtypes_clean": "log/dtypes_clean.json",
+        "dtypes_master": "log/dtypes_master.json",
+        "report_clean": "log/report_clean.html",
+        "report_master": "log/report_master.html"
+    }
+}

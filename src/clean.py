@@ -1,5 +1,6 @@
 import pandas as pd
-import pickle
+import json
+import os
 
 
 def to_snake(str_in, scream=False):
@@ -16,13 +17,13 @@ def to_snake(str_in, scream=False):
 
 if __name__ == "__main__":
 
-    # read in data
-    df = pd.read_csv("resources/data/ames_housing.csv")
+    with open("resources/paths.json", "r") as f:
+        dct_paths = json.load(f)
 
-    # convert column names to snake_case
+    df = pd.read_csv(dct_paths["data"]["raw"])
+
     df.columns = [to_snake(col) for col in df.columns]
 
-    # drop unnecessary columns
     df = df.drop(["unnamed_0", "misc_val"], axis=1)
 
     # define list of categorical columns
@@ -39,10 +40,8 @@ if __name__ == "__main__":
         .reset_index(drop=True)
     )
 
-    # generate dictionary of dtypes
     dct_dtypes = {key: str(value) for key, value in df.dtypes.to_dict().items()}
 
-    # adapt dtypes for certain columns
     for col in [
         "bsmt_full_bath",
         "bsmt_half_bath",
@@ -55,5 +54,13 @@ if __name__ == "__main__":
 
     df = df.astype(dct_dtypes)
 
-    # save output DataFrame as pickled object
-    df.to_csv("resources/data/df_clean.csv", index=False)
+    df.to_csv(dct_paths["data"]["clean"], index=False)
+
+    # create log directory if it does not exist yet
+    try:
+        os.makedirs("log")
+    except FileExistsError:
+        pass
+
+    with open(dct_paths["log"]["dtypes_clean"], "w") as f:
+        json.dump(dct_dtypes, f, indent=4)
