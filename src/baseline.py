@@ -14,7 +14,7 @@ if __name__ == "__main__":
     with open("resources/paths.json", "r") as f:
         dct_paths = json.load(f)
 
-    df = pd.read_csv(dct_paths["master"])
+    df = pd.read_csv(dct_paths["data"]["master"])
 
     with open(dct_paths["log"]["dtypes_master"], "r") as f:
         dct_dtypes = json.load(f)
@@ -56,11 +56,11 @@ if __name__ == "__main__":
 
     dct_mean = {"prediction": np.repeat(pred_mean, len(y_test)), "RMSE": rmse_mean}
 
-    with open("resources/models/baseline_model.pkl", "wb") as f:
+    with open(dct_paths["models"]["model"], "wb") as f:
         pickle.dump(dct_model, f)
 
-    with open("resources/models/baseline_median.pkl", "wb") as f:
+    with open(dct_paths["models"]["median"], "wb") as f:
         pickle.dump(dct_med, f)
 
-    with open("resources/models/baseline_mean.pkl", "wb") as f:
+    with open(dct_paths["models"]["median"], "wb") as f:
         pickle.dump(dct_mean, f)
