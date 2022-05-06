@@ -9,7 +9,7 @@ pipeline {
         }
         stage('CheckWd') {
             steps {
-                echo pwd()
+                sh 'pwd'
             }
         }
         stage('Build') {
