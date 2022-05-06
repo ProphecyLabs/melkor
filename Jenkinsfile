@@ -9,7 +9,7 @@ pipeline {
         }
         stage('CheckWd') {
             steps {
-                sh 'pwd'
+                sh 'tests/run_test.bat'
             }
         }
         stage('Build') {
