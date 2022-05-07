@@ -7,7 +7,7 @@ pipeline {
                 echo 'Hello Melkor'
             }
         }
-        stage('CheckWd') {
+        stage('Test_Clean') {
             steps {
                 sh 'tests/run_test.bat'
             }
