@@ -1,10 +1,18 @@
 import pandas as pd
-import pickle
+import json
 import datetime
 
 if __name__ == "__main__":
 
-    df = pd.read_csv("resources/df_clean.csv")
+    with open("resources/paths.json", "r") as f:
+        dct_paths = json.load(f)
+
+    df = pd.read_csv(dct_paths["data"]["clean"])
+
+    with open(dct_paths["log"]["dtypes_clean"], "r") as f:
+        dct_dtypes = json.load(f)
+
+    df = df.astype(dct_dtypes)
 
     # transform misc_feature values into dummies
     df_tmp = pd.get_dummies(df["misc_feature"])
@@ -12,10 +20,8 @@ if __name__ == "__main__":
     df_tmp.columns = ["elevator", "second_garage", "shed", "tennis_court"]
     df = pd.concat([df, df_tmp], axis=1)
 
-    # age of building
     df["building_age"] = datetime.datetime.now().year - df.year_built
 
-    # time since last renovation
     df["remod_age"] = df.year_remod_add - datetime.datetime.now().year
 
     # indicator whether building has been remodeled at all
@@ -35,8 +41,9 @@ if __name__ == "__main__":
             df_tmp = pd.get_dummies(df[col], prefix=col)
             df = pd.concat([df, df_tmp], axis=1).drop(col, axis=1)
 
-    # save master dataset to csv
-    df.to_csv("resources/master.csv", index=False)
+    df.to_csv(dct_paths["data"]["master"], index=False)
 
-    # generate dictionary of dtypes
     dct_dtypes = {key: str(value) for key, value in df.dtypes.to_dict().items()}
+
+    with open(dct_paths["log"]["dtypes_master"], "w") as f:
+        json.dump(dct_dtypes, f, indent=4)

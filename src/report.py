@@ -1,5 +1,5 @@
 import pandas as pd
-import pickle
+import json
 from pandas_profiling import ProfileReport
 
 # TODO: Add feature descriptions to ProfileReport
@@ -7,14 +7,13 @@ from pandas_profiling import ProfileReport
 
 if __name__ == "__main__":
 
-    # import dataset after cleaning step
-    df_clean = pd.read_csv("resources/mdf_clean.csv")
+    with open("resources/paths.json", "r") as f:
+        dct_paths = json.load(f)
 
-    # import master dataset
-    master = pd.read_csv("resources/master.csv")
+    df_clean = pd.read_csv(dct_paths["data"]["clean"])
 
-    # generate report for dataset after cleaning step
-    ProfileReport(df_clean).to_file("log/report_clean.html")
+    master = pd.read_csv(dct_paths["data"]["clean"])
 
-    # generate report for master dataset
-    ProfileReport(master).to_file("log/report_master.html")
+    ProfileReport(df_clean).to_file(dct_paths["log"]["report_clean"])
+
+    ProfileReport(master).to_file(dct_paths["log"]["report_master"])
