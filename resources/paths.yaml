@@ -1,0 +1,6 @@
+---
+data: "resources/data"
+log: "log"
+experiment_results: 'resources/results'
+latest_model: '2022_05_28_11_51_13'
+models: 'resources/models'
