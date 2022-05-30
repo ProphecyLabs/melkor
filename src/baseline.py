@@ -1,66 +1,69 @@
 import pandas as pd
 import numpy as np
+import yaml
 import pickle
-import json
 
 from sklearn.linear_model import Ridge
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
-
-rndseed = 42
+from sklearn.metrics import mean_squared_error as MSE
 
 if __name__ == "__main__":
 
-    with open("resources/paths.json", "r") as f:
-        dct_paths = json.load(f)
+    with open("resources/paths.yaml") as f:
+        dct_paths = yaml.safe_load(f)
 
-    df = pd.read_csv(dct_paths["data"]["master"])
+    with open(
+        dct_paths["experiment_results"]
+        + "/"
+        + dct_paths["latest_model"]
+        + "/model.pkl",
+        "rb",
+    ) as f:
+        model_final = pickle.load(f)
 
-    with open(dct_paths["log"]["dtypes_master"], "r") as f:
-        dct_dtypes = json.load(f)
+    with open(dct_paths["log"] + "/master_dtypes.yaml") as f:
+        dct_dtypes = yaml.safe_load(f)
 
-    df = df.astype(dct_dtypes)
+    X_train = pd.read_csv(dct_paths["data"] + "/X_train.csv", dtype=dct_dtypes)
+    y_train = pd.read_csv(dct_paths["data"] + "/y_train.csv", dtype=dct_dtypes)
 
-    y = df.sale_price
+    X_test = pd.read_csv(dct_paths["data"] + "/X_test.csv", dtype=dct_dtypes)
+    y_test = pd.read_csv(dct_paths["data"] + "/y_test.csv", dtype=dct_dtypes)
 
-    X = df[[i for i in df.columns if i != "sale_price"]]
+    X_train = pd.concat([X_train, X_test])
+    y_train = pd.concat([y_train, y_test])
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.3, random_state=rndseed
-    )
+    X_val = pd.read_csv(dct_paths["data"] + "/X_val.csv", dtype=dct_dtypes)
+    y_val = pd.read_csv(dct_paths["data"] + "/y_val.csv", dtype=dct_dtypes)
 
     # model uses default alpha value of 1
-    model = Ridge(solver="cholesky")
+    model_base = Ridge(solver="cholesky")
 
-    model.fit(X, y)
+    model_base.fit(X_train, y_train)
 
-    y_hat = model.predict(X_test)
+    y_hat = model_final.predict(X_val)
 
-    rmse_model = mean_squared_error(y_test, y_hat, squared=False)
+    rmse_mod = MSE(y_val, y_hat, squared=False)
+
+    pred_base = model_base.predict(X_val)
+
+    rmse_base = MSE(y_val, pred_base, squared=False)
 
     pred_med = np.median(y_train)
 
-    rmse_med = mean_squared_error(
-        y_test, np.repeat(pred_med, len(y_test)), squared=False
-    )
+    rmse_med = MSE(y_val, np.repeat(pred_med, len(y_val)), squared=False)
 
     pred_mean = np.mean(y_train)
 
-    rmse_mean = mean_squared_error(
-        y_test, np.repeat(pred_mean, len(y_test)), squared=False
-    )
+    rmse_mean = MSE(y_val, np.repeat(pred_mean, len(y_val)), squared=False)
 
-    dct_model = {"prediction": y_hat, "RMSE": rmse_model, "model": model}
+    with open(dct_paths["models"] + "/latest.pkl", "wb") as f:
+        pickle.dump(model_final, f)
 
-    dct_med = {"prediction": np.repeat(pred_med, len(y_test)), "RMSE": rmse_med}
+    with open(dct_paths["models"] + "/baseline.pkl", "wb") as f:
+        pickle.dump(model_base, f)
 
-    dct_mean = {"prediction": np.repeat(pred_mean, len(y_test)), "RMSE": rmse_mean}
+    with open(dct_paths["models"] + "/median.pkl", "wb") as f:
+        pickle.dump(pred_med, f)
 
-    with open(dct_paths["models"]["model"], "wb") as f:
-        pickle.dump(dct_model, f)
-
-    with open(dct_paths["models"]["median"], "wb") as f:
-        pickle.dump(dct_med, f)
-
-    with open(dct_paths["models"]["median"], "wb") as f:
-        pickle.dump(dct_mean, f)
+    with open(dct_paths["models"] + "/mean.pkl", "wb") as f:
+        pickle.dump(pred_mean, f)
