@@ -1,0 +1,21 @@
+data: 
+  root: ./data
+model_pipeline:
+  data_transformation:
+    categorical:
+      one_hot: 
+        name: "preprocessing.OneHotEncoder"
+        params:
+          sparse: False
+          handle_unknown: 'ignore'
+    numerical:
+      scaler:
+        name: "preprocessing.StandardScaler"
+  model:
+    name: "ensemble.RandomForestRegressor"
+    params:
+      n_estimators: 10
+      max_depth: 9
+      random_state: 42
+  test_size: 0.2
+  shuffle_train_split: false
