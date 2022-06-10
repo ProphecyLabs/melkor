@@ -3,17 +3,17 @@ from melkor.models import SKLearnModelPipeline
 from melkor.datasets import AmesDataset
 from melkor.utils import config_parser
 from pathlib import Path
-from sklearn import *
+from sklearn import model_selection, ensemble, preprocessing, metrics
 
 
 def main(config: dict, data: str, model: str):
 
-    ad = AmesDataset(Path(data), target_col="sale_price")
+    ames_data = AmesDataset(Path(data), target_col="sale_price")
 
-    X, y = ad.get_data()
+    X, y = ames_data.get_data()
 
     pipeline = SKLearnModelPipeline(
-        config, cat_cols=ad.get_cat_cols(), num_cols=ad.get_num_cols()
+        config, cat_cols=ames_data.get_cat_cols(), num_cols=ames_data.get_num_cols()
     )
 
     X_train, X_test, y_train, y_test = model_selection.train_test_split(

@@ -1,1 +1,1 @@
-from .sklearn_pipeline import *
+from .sklearn_pipeline import SKLearnModelPipeline
