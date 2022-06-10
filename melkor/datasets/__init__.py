@@ -1,1 +1,1 @@
-from .ames_dataset import *
+from .ames_dataset import AmesDataset
