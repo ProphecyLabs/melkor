@@ -21,9 +21,7 @@ class AmesDataset(PandasBaseDataset):
         if ~self.root.exists():
             self.download()
 
-        self.data = pd.read_csv(self.root / self.filename, index_col=0)
-
-        return self.data
+        return pd.read_csv(self.root / self.filename, index_col=0)
 
     def download(self) -> None:
         response = requests.get(self.URL)

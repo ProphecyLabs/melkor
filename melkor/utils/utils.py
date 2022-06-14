@@ -19,4 +19,4 @@ def config_parser(path: str):
     with open(path, "r") as file:
         data = yaml.safe_load(file)
 
-    return defaultdict(None, data)
+    return defaultdict(dict, data)
