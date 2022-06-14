@@ -6,6 +6,7 @@ from nptyping import NDArray, Float32
 from typing import Union
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
+from sklearn import ensemble, preprocessing
 
 # TODO: Add scoring metrics
 # TODO: Change y to 1d array
@@ -39,8 +40,8 @@ class SKLearnModelPipeline:
 
         data_transformation = ColumnTransformer(
             transformers=[
-                ("num", numeric_transformer, self.num_cols),
-                ("cat", categorical_transformer, self.cat_cols),
+                ("numerical", numeric_transformer, self.num_cols),
+                ("categorical", categorical_transformer, self.cat_cols),
             ]
         )
 
@@ -81,30 +82,8 @@ class SKLearnModelPipeline:
     def predict(self, features: pd.DataFrame):  # -> NDArray[Float32]
         return self.pipeline.predict(features)
 
+    def get_model(self):
+        return self.pipeline["model"].steps[0][1]
 
-if __name__ == "__main__":
-    from melkor.models import SKLearnModelPipeline
-    from melkor.datasets import AmesDataset
-    from pathlib import Path
-
-    ad = AmesDataset(Path("resources/data"), target_col="sale_price")
-
-    import yaml
-    from collections import defaultdict
-    from sklearn import *
-
-    with open("configs/config.yaml", "r") as file:
-        data = yaml.safe_load(file)
-    data = defaultdict(None, data)
-
-    X, y = ad.get_data()
-
-    pipeline = SKLearnModelPipeline(
-        data, cat_cols=ad.get_cat_cols(), num_cols=ad.get_num_cols()
-    )
-
-    pipeline.fit(X, y)
-
-    y_hat = pipeline.predict(X)
-
-    print(y_hat)
+    def get_data_transformation(self):
+        return self.pipeline["data_transform"].steps[0][1]

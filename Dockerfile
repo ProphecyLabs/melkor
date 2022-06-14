@@ -1,13 +1,12 @@
 # syntax=docker/dockerfile:1
 
-FROM python:slim-buster
+FROM python
 
 MAINTAINER olga.kravchenko@prophecylabs.com
 
 WORKDIR /app
 
-COPY . .
-RUN pip install --upgrade pip
-RUN pip install -e .
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
 
-EXPOSE 8889
+COPY . .
