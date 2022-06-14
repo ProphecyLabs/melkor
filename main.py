@@ -3,7 +3,7 @@ from melkor.models import SKLearnModelPipeline
 from melkor.datasets import AmesDataset
 from melkor.utils import config_parser
 from pathlib import Path
-from sklearn import model_selection, ensemble, preprocessing, metrics
+from sklearn import model_selection, metrics
 
 
 def main(config: dict, data: str, model: str):
