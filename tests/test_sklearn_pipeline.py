@@ -5,6 +5,7 @@ from melkor.utils import config_parser
 from pathlib import Path
 from copy import copy
 from sklearn import preprocessing, ensemble, model_selection
+import os
 
 
 class TestSKLearnModelPipeline:
@@ -83,7 +84,7 @@ class TestSKLearnModelPipeline:
         assert isinstance(pipeline_model, model_class), "Incorrect model class"
 
     def test_pipeline_save(self):
-        pipeline_path = "resources/models/latest.pkl"
+        pipeline_path = "resources/models/test.pkl"
 
         self.pipeline.fit(self.X_train, self.y_train)
 
@@ -92,6 +93,8 @@ class TestSKLearnModelPipeline:
         self.pipeline.save_model_pipeline(pipeline_path)
 
         self.pipeline.load_model_pipeline(pipeline_path)
+
+        os.remove(pipeline_path)
 
         model_original = self.pipeline.get_model()
         model_copy = pipeline_copy.get_model()
@@ -120,7 +123,3 @@ class TestSKLearnModelPipeline:
         y_hat = self.pipeline.predict(self.X_test)
 
         assert sum(y_hat.shape) > 0, "Pipeline predictions should not be empty"
-
-
-if __name__ == "__main__":
-    TestSKLearnModelPipeline().test_pipeline_save()
