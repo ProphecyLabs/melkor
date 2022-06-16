@@ -8,7 +8,7 @@ from sklearn import model_selection, metrics
 
 def main(config: dict, data: str, model: str):
 
-    ames_data = AmesDataset(Path(data), target_col="sale_price")
+    ames_data = AmesDataset()
 
     X, y = ames_data.get_data()
 

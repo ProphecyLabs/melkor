@@ -1,5 +1,4 @@
 import pandas as pd
-import requests
 from datetime import datetime
 from pathlib import Path
 from melkor.base import PandasBaseDataset
@@ -7,38 +6,29 @@ from melkor.utils import to_snake
 
 
 class AmesDataset(PandasBaseDataset):
+    """Class for ames dataset
+
+    Args:
+    root (Path, optional): path for data storage. Defaults to Path("./resources/data").
+    """
 
     URL = "https://katrienantonio.github.io/hands-on-machine-learning-R-module-1/data/ames_python.csv"
     filename = "ames_data.csv"
+    target_col = "sale_price"
 
-    def __init__(self, root: Path, target_col: str) -> None:
-        self.root = root.absolute()
-        self.data = self.read()
+    def __init__(self, root: Path = Path("./resources/data")):
+        super().__init__(self.filename, root, self.URL)
+        self.read(pd.read_csv, filepath_or_buffer=self.filepath, index_col=0)
         self.prepare_dataset()
-        self.target_col = target_col
 
-    def read(self) -> pd.DataFrame:
-        if ~self.root.exists():
-            self.download()
-
-        return pd.read_csv(self.root / self.filename, index_col=0)
-
-    def download(self) -> None:
-        response = requests.get(self.URL)
-
-        assert response.ok, "Could not fetch dataset"
-
-        with open(self.root / self.filename, "wb") as f:
-            f.write(response.content)
-
-    def prepare_dataset(self) -> None:
+    def prepare_dataset(self):
 
         self.data.columns = [to_snake(col) for col in self.data.columns]
 
         self.data = self.data.drop(["misc_val"], axis=1)
 
         # convert strings in categorical columns to SNAKE_CASE
-        for col in self.data.select_dtypes(include=["object"]).columns:
+        for col in self.get_cat_cols():
             self.data[col] = self.data[col].apply(lambda x: to_snake(x, scream=True))
 
         # drop duplicate entries based on latitude and longitude columns
