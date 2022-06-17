@@ -2,7 +2,6 @@ import pytest
 from melkor.datasets import AmesDataset
 from melkor.models import SKLearnModelPipeline
 from melkor.utils import config_parser
-from pathlib import Path
 from copy import copy
 from sklearn import preprocessing, ensemble, model_selection
 import os

@@ -1,5 +1,4 @@
 from melkor.datasets import AmesDataset
-from pathlib import Path
 
 
 class TestAmesDataset:
