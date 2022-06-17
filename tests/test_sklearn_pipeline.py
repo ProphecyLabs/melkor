@@ -9,11 +9,11 @@ import os
 
 
 class TestSKLearnModelPipeline:
-    ames_data = AmesDataset(Path("resources/data"), target_col="sale_price")
+    ames = AmesDataset()
 
     config = config_parser("configs/config.yaml")
 
-    X, y = ames_data.get_data()
+    X, y = ames.get_data()
 
     X_train, X_test, y_train, y_test = model_selection.train_test_split(
         X,
@@ -24,8 +24,8 @@ class TestSKLearnModelPipeline:
 
     pipeline = SKLearnModelPipeline(
         config,
-        cat_cols=ames_data.get_cat_cols(),
-        num_cols=ames_data.get_num_cols(),
+        cat_cols=ames.get_cat_cols(),
+        num_cols=ames.get_num_cols(),
     )
 
     def test_pipeline_steps(self):
@@ -39,8 +39,8 @@ class TestSKLearnModelPipeline:
         new_config["model_pipeline"]["data_transformation"][feature_type] = {}
         pipeline = SKLearnModelPipeline(
             new_config,
-            cat_cols=self.ames_data.get_cat_cols(),
-            num_cols=self.ames_data.get_num_cols(),
+            cat_cols=self.ames.get_cat_cols(),
+            num_cols=self.ames.get_num_cols(),
         )
         steps = pipeline.pipeline.named_steps.keys()
         assert "data_transform" in steps, "No data transformation in pipeline steps"
@@ -65,8 +65,8 @@ class TestSKLearnModelPipeline:
         }
         pipeline = SKLearnModelPipeline(
             new_config,
-            cat_cols=self.ames_data.get_cat_cols(),
-            num_cols=self.ames_data.get_num_cols(),
+            cat_cols=self.ames.get_cat_cols(),
+            num_cols=self.ames.get_num_cols(),
         )
         data_dict = {
             i[0]: i[1] for i in pipeline.pipeline["data_transform"].transformers

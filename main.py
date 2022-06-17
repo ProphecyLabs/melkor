@@ -8,12 +8,12 @@ from sklearn import model_selection, metrics
 
 def main(config: dict, data: str, model: str):
 
-    ames_data = AmesDataset()
+    ames = AmesDataset()
 
-    X, y = ames_data.get_data()
+    X, y = ames.get_data()
 
     pipeline = SKLearnModelPipeline(
-        config, cat_cols=ames_data.get_cat_cols(), num_cols=ames_data.get_num_cols()
+        config, cat_cols=ames.get_cat_cols(), num_cols=ames.get_num_cols()
     )
 
     X_train, X_test, y_train, y_test = model_selection.train_test_split(
