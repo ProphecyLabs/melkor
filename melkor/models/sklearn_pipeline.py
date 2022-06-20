@@ -77,7 +77,7 @@ class SKLearnModelPipeline:
     def fit(
         self, features: pd.DataFrame, target: Union[pd.DataFrame, pd.Series]
     ) -> None:
-        self.pipeline.fit(features, target)
+        self.pipeline.fit(features, target.values.ravel())
 
     def predict(self, features: pd.DataFrame):  # -> NDArray[Float32]
         return self.pipeline.predict(features)

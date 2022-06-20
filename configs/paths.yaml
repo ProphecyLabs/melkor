@@ -1,0 +1,6 @@
+data:
+  url: "https://katrienantonio.github.io/hands-on-machine-learning-R-module-1/data/ames_python.csv"
+  root: "./resources/data"
+  filename: ames_data.csv
+config: "configs/config.yaml"
+model: "resources/models/latest.pkl"

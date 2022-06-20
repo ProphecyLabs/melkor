@@ -6,9 +6,9 @@ from pathlib import Path
 from sklearn import model_selection, metrics
 
 
-def main(config: dict, data: str, model: str):
+def main(config: dict, data_path: dict, model_path: str):
 
-    ames = AmesDataset()
+    ames = AmesDataset(data_path["filename"], Path(data_path["root"]), data_path["url"])
 
     X, y = ames.get_data()
 
@@ -25,7 +25,7 @@ def main(config: dict, data: str, model: str):
 
     pipeline.fit(X_train, y_train)
 
-    pipeline.save_model_pipeline(model)
+    pipeline.save_model_pipeline(model_path)
 
     y_hat = pipeline.predict(X_test)
 
@@ -36,33 +36,8 @@ def main(config: dict, data: str, model: str):
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser(description="Based On Sklearn Template")
-    parser.add_argument(
-        "-c",
-        "--config",
-        default="configs/config.yaml",
-        type=str,
-        help="config file path (default: configs/config.yaml)",
-    )
+    paths = config_parser("configs/paths.yaml")
 
-    parser.add_argument(
-        "-d",
-        "--data",
-        default="resources/data",
-        type=Path,
-        help="input data path (default: resources/data)",
-    )
+    config = config_parser(paths["config"])
 
-    parser.add_argument(
-        "-m",
-        "--model",
-        default="resources/models/latest.pkl",
-        type=Path,
-        help="output model path (default: resources/models/latest.pkl)",
-    )
-
-    args = parser.parse_args()
-
-    config = config_parser(args.config)
-
-    main(config, args.data, args.model)
+    main(config, paths["data"], paths["model"])

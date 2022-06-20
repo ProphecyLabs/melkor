@@ -10,11 +10,13 @@ class PandasBaseDataset:
 
     Args:
         filename (str): filename for saved file
-        root (str, optional): root path for file storage. Defaults to Path("./data").
+        root (str, optional): root path for file storage. Defaults to Path("./resources/data").
         URL (str, optional): URL of dataset. Defaults to None.
     """
 
-    def __init__(self, filename: str, root: Path = Path("./data"), URL: str = None):
+    def __init__(
+        self, filename: str, root: Path = Path("./resources/data"), URL: str = None
+    ):
 
         self.root = root.absolute()
         self.URL = URL
