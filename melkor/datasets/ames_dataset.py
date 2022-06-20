@@ -12,12 +12,10 @@ class AmesDataset(PandasBaseDataset):
     root (Path, optional): path for data storage. Defaults to Path("./resources/data").
     """
 
-    URL = "https://katrienantonio.github.io/hands-on-machine-learning-R-module-1/data/ames_python.csv"
-    filename = "ames_data.csv"
     target_col = "sale_price"
 
-    def __init__(self, root: Path = Path("./resources/data")):
-        super().__init__(self.filename, root, self.URL)
+    def __init__(self, filename: str, root: Path, URL: str):
+        super().__init__(filename, root, URL)
         self.read(pd.read_csv, filepath_or_buffer=self.filepath, index_col=0)
         self.prepare_dataset()
 

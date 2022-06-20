@@ -1,5 +1,3 @@
-data: 
-  root: ./data
 model_pipeline:
   data_transformation:
     categorical:
