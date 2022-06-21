@@ -136,3 +136,6 @@ dmypy.json
 
 # folder for data reports
 *log/
+
+# dot files from pyreverse
+*.dot
