@@ -35,3 +35,16 @@ Your Pages site will use the layout and styles from the Jekyll theme you have se
 ### Support or Contact
 
 Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+
+
+# How to generate class diagrams
+
+## 1. Install necessary packages
+`pip install pylint, pip install graphviz, pip install pydot`
+
+
+## 2. Generate .dot files
+`pyreverse melkor`
+
+## 3. Generate png out of .dot file
+`dot -Tpng classes.dot > class_diagrams.png`
