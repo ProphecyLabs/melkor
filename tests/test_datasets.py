@@ -1,8 +1,10 @@
 from melkor.datasets import AmesDataset
-
+from melkor.utils import config_parser
+from pathlib import Path
 
 class TestAmesDataset:
-    ames = AmesDataset()
+    paths = config_parser("configs/paths.yaml")["data"]
+    ames = AmesDataset(paths["filename"], Path(paths["root"]), paths["url"])
 
     def test_data_shape(self):
         assert sum(self.ames.data.shape) > 0, "DataFrame is empty"

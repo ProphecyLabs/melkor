@@ -5,10 +5,12 @@ from melkor.utils import config_parser
 from copy import copy
 from sklearn import preprocessing, ensemble, model_selection
 import os
+from pathlib import Path
 
 
 class TestSKLearnModelPipeline:
-    ames = AmesDataset()
+    paths = config_parser("configs/paths.yaml")["data"]
+    ames = AmesDataset(paths["filename"], Path(paths["root"]), paths["url"])
 
     config = config_parser("configs/config.yaml")
 
