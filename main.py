@@ -1,12 +1,12 @@
 import argparse
 from melkor.models import SKLearnModelPipeline
 from melkor.datasets import AmesDataset
-from melkor.utils import config_parser
+from melkor.utils import config_parser, eval_regression
 from pathlib import Path
-from sklearn import model_selection, metrics
+from sklearn import model_selection
 
 
-def main(config: dict, data_path: dict, model_path: str):
+def main(config: dict, data_path: dict, model_uri: str):
 
     ames = AmesDataset(data_path["filename"], Path(data_path["root"]), data_path["url"])
 
@@ -27,11 +27,17 @@ def main(config: dict, data_path: dict, model_path: str):
 
     pipeline.save_model_pipeline(model_path)
 
-    y_hat = pipeline.predict(X_test)
+    y_hat_test = pipeline.predict(X_test)
+    y_hat_train = pipeline.predict(X_train)
 
-    rmse = metrics.mean_squared_error(y_test, y_hat, squared=False)
+    train_metrics = eval_regression(y_train, y_hat_train)
+    test_metrics = eval_regression(y_test, y_hat_test)
 
-    print(rmse)
+    print("METRIC"+" "*16+"TRAIN "+" "*16+"TEST")
+    for metric in train_metrics.keys():
+        train_metric = train_metrics[metric]
+        test_metric = test_metrics[metric]
+        print(f"{metric} {' '*(20-len(metric))} {train_metric} {' '*(20-len(str(train_metric)))} {test_metric:.4f}")
 
 
 if __name__ == "__main__":
