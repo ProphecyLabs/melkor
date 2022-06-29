@@ -70,3 +70,14 @@ class AmesDataset(PandasBaseDataset):
 
         # indicator whether house has masonry veneer
         self.data["second_flr"] = (self.data["mas_vnr_area"] > 0).astype("int")
+
+        # indicator whether house has a basement
+        self.data["bsmt"] = (~(self.data["bsmt_qual"] == "NO_BASEMENT")).astype("int")
+
+        # indicator whether asbestos is present in the house
+        self.data["asbestos"] = self.data.apply(
+            lambda row: 1
+            if (row["exterior_1st"] == "ASBSHNG") | (row["exterior_2nd"] == "ASBSHNG")
+            else 0,
+            axis=1,
+        )
