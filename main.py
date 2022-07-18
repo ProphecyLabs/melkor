@@ -12,6 +12,16 @@ import mlflow
 def log_data(
     frame: Union[pd.DataFrame, pd.Series], output_dir: Path, name: str
 ) -> None:
+    """MLFlow requires artifacts to be saved manually.
+    Save pandas data to the output directory so that it can be logged by mlflow as an artifact.
+
+    Parameters
+    ----------
+    frame: {pandas Series or DataFrame} the data that need to be saved.
+    output_dir: {Path} the path of the outputs of the run
+    name: {str} name of the artifact that's being saved i.e. training_data
+
+    """
     data_dir = output_dir / "data"
     if not data_dir.exists():
         data_dir.mkdir(parents=True)

@@ -21,6 +21,18 @@ def eval_regression(
     y_true: Union[list, np.array, pd.Series],
     y_predicted: Union[list, np.array, pd.Series],
 ) -> dict:
+    """Evaluate a regression model and return a report on the most common metrics.
+
+    Parameters
+    ----------
+    y_true: {list, numpy array, pandas Series} ground truth regression labels
+    y_predicted: {list, numpy array, pandas Series} predicted regression labels
+
+    Returns
+    ----------
+    metrics: {dict['metric name']: metric value} a dictionary of the most common regression metrics.
+
+    """
     metrics = {}
     metrics["mse"] = mean_squared_error(y_true, y_predicted)
     metrics["rmse"] = mean_squared_error(y_true, y_predicted, squared=False)
@@ -36,6 +48,18 @@ def eval_classification(
     y_predicted: Union[list, np.array, pd.Series],
     binary: bool = False,
 ) -> dict:
+    """Evaluate a classification model and return a report on the most common metrics.
+
+    Parameters
+    ----------
+    y_true: {list, numpy array, pandas Series} ground truth classification labels
+    y_predicted: {list, numpy array, pandas Series} predicted classification labels
+
+    Returns
+    ----------
+    metrics: {dict['metric name']: metric value} a dictionary of the most common classification metrics.
+
+    """
     metrics = {}
     if binary:
         metrics["roc_auc"] = roc_auc_score(y_true, y_predicted)
