@@ -3,4 +3,4 @@ data:
   root: "./resources/data"
   filename: ames_data.csv
 config: "configs/config.yaml"
-model: "resources/models/latest.pkl"
+model: "resources/models"

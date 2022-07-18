@@ -5,3 +5,4 @@ nptyping==2.1.1
 requests
 pyyaml
 pytest
+mlflow==1.26.1

@@ -62,6 +62,10 @@ class SKLearnModelPipeline:
         with open(path, "rb") as f:
             self.pipeline = pickle.load(f)
 
+    def load_model_from_uri(self, uri: str) -> None:
+        import mlflow
+        self.pipeline = mlflow.pyfunc.load_model(uri)
+
     def parse_subpipeline(self, subconfig) -> Pipeline:
 
         pipeline_steps = []
